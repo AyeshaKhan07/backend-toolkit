@@ -1,0 +1,28 @@
+{
+  "name": "backend-toolkit",
+  "version": "1.0.0",
+  "description": "A toolkit for a quick backend server with all the crucial functionalities without writing it from scratch.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/index.js",
+    "dev": "nodemon src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AyeshaKhan07/backend-toolkit.git"
+  },
+  "author": "Ayesha Danial",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AyeshaKhan07/backend-toolkit/issues"
+  },
+  "homepage": "https://github.com/AyeshaKhan07/backend-toolkit#readme",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2"
+  }
+}

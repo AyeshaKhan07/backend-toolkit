@@ -1,0 +1,15 @@
+// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "es2022", /* Specify ECMAScript target version */
+    "module": "NodeNext", /* Specify module code generation */
+    "moduleResolution": "NodeNext", /* Specify module resolution strategy */
+    "outDir": "./dist", /* Redirect output structure to the directory */
+    "rootDir": "./src", /* Specify the root directory of input files */
+    "esModuleInterop": true, /* Enable interoperability between CommonJS and ES modules */
+    "strict": true, /* Enable all strict type-checking options */
+    "skipLibCheck": true, /* Skip type checking of declaration files */
+    "sourceMap": true, /* Generates corresponding '.map' file */
+    "types": ["node"] /* Include type definitions for Node.js */
+  }
+}
