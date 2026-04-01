@@ -20,8 +20,16 @@ class AuthRouter {
                     case AuthUrls.REGISTER:
                         // Handle register
                         break;
+                    default:
+                        res.writeHead(404);
+                        res.end("Endpoint not found");
+                        break
                 }
                 break;
+            default:
+                res.writeHead(405);
+                res.end("Method not allowed");
+                break
         }
     }
 }
