@@ -1,18 +1,26 @@
 import { IncomingMessage, ServerResponse } from "node:http";
 import { IRequest, Methods } from "../types/shared.types";
 
-export default function bodyParser(incomingRequest: IncomingMessage, response: ServerResponse, next: Function) {
+export default function bodyParser(incomingRequest: IncomingMessage, response: ServerResponse, nextMiddleware: Function) {
     const requestBody: Uint8Array<ArrayBufferLike>[] = [];
     let request = incomingRequest as IRequest;
     const baseUrl = incomingRequest.url?.split("/");
-    if (baseUrl?.length && baseUrl?.length > 2)
-        request.module = baseUrl?.[2] as IRequest["module"];
+    
+    if (baseUrl?.length) {
+        request.baseUrl = baseUrl?.[1] as IRequest["baseUrl"];
+
+        if (baseUrl?.length > 2)
+            request.module = baseUrl?.[2] as IRequest["module"];
+
+        if (baseUrl?.length > 3)
+            request.api = baseUrl?.[3] as IRequest["api"];
+    }
 
     const { method } = incomingRequest;
     const noBodyMethods: Methods[] = ["GET", "HEAD", "DELETE"];
 
     if (noBodyMethods.includes(method as Methods))
-        return next();
+        return nextMiddleware();
 
     incomingRequest
         .on("data", (chunk) => {
@@ -21,7 +29,7 @@ export default function bodyParser(incomingRequest: IncomingMessage, response: S
         .on("end", () => {
             try {
                 request.body = JSON.parse(Buffer.concat(requestBody).toString());
-                next();
+                nextMiddleware();
             } catch (err) {
                 response.statusCode = 400;
                 response.end("Invalid JSON body");

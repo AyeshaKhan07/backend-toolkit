@@ -8,12 +8,12 @@ export enum AuthUrls {
 }
 class AuthRouter {
     private authController: AuthController;
-    constructor(url: AuthUrls, req: IRequest, res: ServerResponse) {
+    constructor(req: IRequest, res: ServerResponse) {
         const method = req.method as Methods;
         this.authController = new AuthController();
         switch(method) {
             case "POST":
-                switch(url) {
+                switch(req.api) {
                     case AuthUrls.LOGIN:
                         this.authController.login(req, res);
                         break;
