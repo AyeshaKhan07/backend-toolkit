@@ -8,7 +8,8 @@ class AuthController {
         this.service = new AuthService();
     }
     login(req: IRequest, res: ServerResponse) {
-        return this.service.login(req.body.email, req.body.password);
+        this.service.login(req.body.email, req.body.password);
+        res.end("Login successful");
     }
 
     register(req: IncomingMessage, res: ServerResponse) {
