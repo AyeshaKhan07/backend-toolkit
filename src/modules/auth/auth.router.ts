@@ -2,7 +2,7 @@ import { ServerResponse } from "node:http";
 import AuthController from "./auth.controller";
 import { IRequest, Methods } from "../../types/shared.types";
 
-export enum AuthUrls {
+export enum AuthApis {
     LOGIN = "login",
     REGISTER = "register"
 }
@@ -14,10 +14,10 @@ class AuthRouter {
         switch(method) {
             case "POST":
                 switch(req.api) {
-                    case AuthUrls.LOGIN:
+                    case AuthApis.LOGIN:
                         this.authController.login(req, res);
                         break;
-                    case AuthUrls.REGISTER:
+                    case AuthApis.REGISTER:
                         // Handle register
                         break;
                     default:

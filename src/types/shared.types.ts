@@ -1,5 +1,5 @@
 import { IncomingMessage } from "node:http";
-import { AuthUrls } from "../modules/auth/auth.router";
+import { AuthApis } from "../modules/auth/auth.router";
 
 export type Methods = "POST" | "GET" | "PUT" | "DELETE" | "HEAD";
 export enum Modules {
@@ -9,5 +9,5 @@ export interface IRequest extends IncomingMessage {
     body: any;
     module: Modules;
     baseUrl: "api";
-    api: AuthUrls
+    api: AuthApis
 }

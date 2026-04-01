@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from "node:http";
-import AuthRouter, { AuthUrls } from "../modules/auth/auth.router";
+import AuthRouter, { AuthApis } from "../modules/auth/auth.router";
 import { IRequest, Modules } from "../types/shared.types";
 
 export default function routesInitializer(request: IRequest, response: ServerResponse) {

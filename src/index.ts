@@ -4,10 +4,11 @@ import requestHandler from "./request-handler";
 import routesInitializer from "./middlewares/routes-initializer";
 import errorHandler from "./middlewares/error-handler";
 import logger from "./middlewares/logger";
+import requestValidator from "./middlewares/request-validator";
 
 const server = createServer();
 
-server.on("request", (req, res) => requestHandler(req, res, [errorHandler, bodyParser, logger, routesInitializer]))
+server.on("request", (req, res) => requestHandler(req, res, [errorHandler, bodyParser, logger, requestValidator, routesInitializer]))
 
 const PORT = process.env.PORT || 3000;
 
