@@ -1,6 +1,8 @@
+import { LoginDto } from "./dtos/login.dto";
+
 class AuthService {
-    login(email: string, password: string) {
-        console.log(`Logging in with email: ${email} and password: ${password}`);
+    login(payload: LoginDto) {
+        console.log(`Logging in with email: ${payload.email} and password: ${payload.password}`);
     }
 
     register(email: string, password: string) {

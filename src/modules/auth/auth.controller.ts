@@ -1,6 +1,7 @@
 import { IncomingMessage, ServerResponse } from "node:http";
 import AuthService from "./auth.service";
 import { IRequest } from "../../types/shared.types";
+import { responseParser } from "../../shared/response-parser";
 
 class AuthController {
     private service: AuthService
@@ -8,8 +9,8 @@ class AuthController {
         this.service = new AuthService();
     }
     login(req: IRequest, res: ServerResponse) {
-        this.service.login(req.body.email, req.body.password);
-        res.end("Login successful");
+        this.service.login(req.body);
+        return res.end(responseParser({ statusCode: 200, message: "Login successful" }));
     }
 
     register(req: IncomingMessage, res: ServerResponse) {
