@@ -7,11 +7,12 @@ import requestValidator from "./middlewares/request-validator";
 import routesInitializer from "./middlewares/routes-initializer";
 import requestHandler from "./request-handler";
 import { connectDatabase } from "./database";
+import authentication from "./middlewares/authentication";
 
 loadEnvFile();
 const server = createServer();
 connectDatabase();
-server.on("request", (req, res) => requestHandler(req, res, [errorHandler, bodyParser, logger, requestValidator, routesInitializer]))
+server.on("request", (req, res) => requestHandler(req, res, [authentication, errorHandler, bodyParser, logger, requestValidator, routesInitializer]))
 const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {

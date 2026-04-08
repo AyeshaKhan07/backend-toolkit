@@ -11,3 +11,8 @@ export interface IRequest extends IncomingMessage {
     baseUrl: "api";
     api: AuthApis
 }
+
+export interface IToken {
+    email: string
+    id: number
+}
