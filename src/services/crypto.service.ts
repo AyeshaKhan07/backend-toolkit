@@ -13,10 +13,9 @@ class Crypto {
     }
 
     static generateToken(payload: IToken): string {
-        const randomIV = crypto.randomBytes(16);
+        const randomIV = crypto.randomBytes(8);
         const token = crypto.createCipheriv("aes-256-cbc", process.env.JWT_SECRET||"", randomIV)
         .update(JSON.stringify(payload), "utf-8", "hex")
-        // .final("hex");
 
         return token
     }

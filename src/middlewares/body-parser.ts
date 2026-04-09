@@ -2,6 +2,7 @@ import { IncomingMessage, ServerResponse } from "node:http";
 import { IRequest, Methods } from "../types/shared.types";
 
 export default function bodyParser(incomingRequest: IncomingMessage, response: ServerResponse, nextMiddleware: Function) {
+    console.debug("Body Parser middleware executed");
     const requestBody: Uint8Array<ArrayBufferLike>[] = [];
     let request = incomingRequest as IRequest;
     const baseUrl = incomingRequest.url?.split("/");
@@ -29,11 +30,12 @@ export default function bodyParser(incomingRequest: IncomingMessage, response: S
         .on("end", () => {
             try {
                 request.body = JSON.parse(Buffer.concat(requestBody).toString());
-                nextMiddleware();
             } catch (err) {
+                console.error("Error parsing JSON body:", err);
                 response.statusCode = 400;
                 response.end("Invalid JSON body");
             }
+            nextMiddleware();
         })
 
 }
