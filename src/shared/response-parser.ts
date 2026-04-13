@@ -9,7 +9,7 @@ export function responseParser(options: {errors?: any, message?: string, data?: 
     }
     return JSON.stringify({
         statusCode: options.statusCode || 200,
-        statusMessage: "OK",
+        statusMessage: options.message || "OK",
         message: options.message || "Success",
         data: options.data || null
     });

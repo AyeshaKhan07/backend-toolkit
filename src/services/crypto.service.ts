@@ -32,9 +32,10 @@ class Crypto {
 
     static verifyToken(token: string) {
         const [encryptedData, iv] = token.split('|');
-        const key = process.env.JWT_SECRET
+        const secret = process.env.JWT_SECRET;
 
-        if (key) {
+        if (secret) {
+            const key = crypto.createHash('sha256').update(secret).digest();
             const decipher = crypto.createDecipheriv(
                 'aes-256-cbc',
                 key,

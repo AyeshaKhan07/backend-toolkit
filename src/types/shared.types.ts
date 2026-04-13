@@ -10,6 +10,10 @@ export interface IRequest extends IncomingMessage {
     module: Modules;
     baseUrl: "api";
     api: AuthApis
+    user: {
+        id: number,
+        email: string
+    }
 }
 
 export interface IToken {
