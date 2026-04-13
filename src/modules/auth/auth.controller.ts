@@ -9,8 +9,9 @@ class AuthController {
         this.service = new AuthService();
     }
     login(req: IRequest, res: ServerResponse) {
-        this.service.login(req.body);
-        return res.end(responseParser({ statusCode: 200, message: "Login successful" }));
+        const responseData = this.service.login(req.body);
+        res.statusCode = 200;
+        return res.end(JSON.stringify({ token: responseData }));
     }
 
     register(req: IncomingMessage, res: ServerResponse) {

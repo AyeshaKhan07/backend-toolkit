@@ -13,16 +13,44 @@ class Crypto {
     }
 
     static generateToken(payload: IToken): string {
-        const randomIV = crypto.randomBytes(8);
-        const token = crypto.createCipheriv("aes-256-cbc", process.env.JWT_SECRET||"", randomIV)
-        .update(JSON.stringify(payload), "utf-8", "hex")
+        const iv = crypto.randomBytes(16);
+        const secret = process.env.JWT_SECRET
 
-        return token
+        if (secret) {
+            const key = crypto.createHash('sha256').update(secret).digest();
+
+            const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+
+            let encrypted = cipher.update(JSON.stringify(payload), 'utf8', 'hex');
+            encrypted += cipher.final('hex');
+
+            return `${encrypted}|${iv.toString('hex')}`;
+        }
+
+        throw new Error("JWT_SECRET is not defined in environment variables");
     }
 
-    static verifyToken(token: string): IToken | null {
-        // Implement token verification logic
-        return token === "valid-token" ? { email: "user@example.com", id: 1 } : null;
+    static verifyToken(token: string) {
+        const [encryptedData, iv] = token.split('|');
+        const key = process.env.JWT_SECRET
+
+        if (key) {
+            const decipher = crypto.createDecipheriv(
+                'aes-256-cbc',
+                key,
+                Buffer.from(iv, 'hex')
+            );
+
+            // Decrypt the data
+            let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
+            decrypted += decipher.final('utf8');
+
+            try {
+                return JSON.parse(decrypted);
+            } catch (error) {
+                throw new Error("Invalid token");
+            }
+        }
     }
 }
 
