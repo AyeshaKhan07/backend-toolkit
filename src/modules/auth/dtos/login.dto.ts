@@ -23,8 +23,8 @@ export class LoginDto {
         if(!validateEmail(this.email)){
             this.errorMessages.email = "Invalid email format";
         }
-
-        if(this.password.length < 6){
+        
+        if(this.password?.length < 6){
             this.errorMessages.password = "Password must be at least 6 characters long";
         }
         

@@ -10,6 +10,7 @@ export default function requestValidator(request: IRequest, response: ServerResp
 
     if (noBodyMethods.includes(request.method as Methods))
         return nextMiddleware();
+    
     switch (request.api) {
         case AuthApis.LOGIN:
             const errors = new LoginDto(request.body).errorMessages;

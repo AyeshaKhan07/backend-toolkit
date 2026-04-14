@@ -1,6 +1,7 @@
 import { ServerResponse } from "node:http";
 import AuthController from "./auth.controller";
 import { IRequest, Methods } from "../../types/shared.types";
+import ApiError from "../../shared/error-handler";
 
 export enum AuthApis {
     LOGIN = "login",
@@ -21,15 +22,11 @@ class AuthRouter {
                         // Handle register
                         break;
                     default:
-                        res.writeHead(404);
-                        res.end("Endpoint not found");
-                        break
+                        throw new ApiError("Endpoint not found", { statusCode: 404 });
                 }
                 break;
             default:
-                res.writeHead(405);
-                res.end("Method not allowed");
-                break
+                throw new ApiError("Method not allowed", { statusCode: 405 });
         }
     }
 }

@@ -1,6 +1,5 @@
 import { IncomingMessage, ServerResponse } from "node:http";
 import ApiError from "./shared/error-handler";
-import { IError } from "./types/shared.types";
 
 export default function requestHandler(request: IncomingMessage, response: ServerResponse, middlewares: Array<any>) {
     let index = 0;
@@ -8,12 +7,12 @@ export default function requestHandler(request: IncomingMessage, response: Serve
         const middleware = middlewares[index];
         if(index < middlewares.length)
             index++
-        middleware(request, response, next);
+
+        try {
+            middleware(request, response, next);
+        } catch (error) {
+            ApiError.handleError(error as ApiError, response);
+        }
     }
-    try {
-        next();
-    } catch (error) {
-        console.log("catched", error)
-        ApiError.handleError(error as ApiError, response);
-    }
+    next();
 }

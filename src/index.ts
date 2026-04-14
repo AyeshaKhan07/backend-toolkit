@@ -1,7 +1,6 @@
 import { createServer } from "node:http";
 import { loadEnvFile } from "node:process";
 import bodyParser from "./middlewares/body-parser";
-import errorHandler from "./middlewares/error-handler";
 import logger from "./middlewares/logger";
 import requestValidator from "./middlewares/request-validator";
 import routesInitializer from "./middlewares/routes-initializer";
@@ -12,7 +11,7 @@ import authentication from "./middlewares/authentication";
 loadEnvFile();
 const server = createServer();
 connectDatabase();
-server.on("request", (req, res) => requestHandler(req, res, [authentication, errorHandler, bodyParser, logger, requestValidator, routesInitializer]))
+server.on("request", (req, res) => requestHandler(req, res, [authentication, bodyParser, logger, requestValidator, routesInitializer]))
 const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {

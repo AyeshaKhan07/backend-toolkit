@@ -38,7 +38,7 @@ class Crypto {
     static verifyToken(token: string) {
         const [encryptedData, iv] = token.split('|');
         const secret = process.env.JWT_SECRET;
-        if (secret) {
+        if (secret && encryptedData && iv) {
             const key = crypto.createHash('sha256').update(secret).digest();
             const decipher = crypto.createDecipheriv(
                 'aes-256-cbc',
@@ -55,7 +55,8 @@ class Crypto {
                 throw new ApiError("Invalid token", { statusCode: 401 });
             }
         }
-        throw new ApiError("JWT_SECRET is not defined in environment variables");
+        if (!secret) throw new ApiError("JWT_SECRET is not defined in environment variables");
+        if (!encryptedData || !iv) throw new ApiError("Invalid token", { statusCode: 401 });
     }
 }
 
