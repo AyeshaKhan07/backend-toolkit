@@ -20,3 +20,8 @@ export interface IToken {
     email: string
     id: number
 }
+
+export interface IError extends Error {
+    statusCode?: number;
+    validationErrors?: { [key: string]: string };
+}

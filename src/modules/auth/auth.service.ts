@@ -3,9 +3,13 @@ import { LoginDto } from "./dtos/login.dto";
 
 class AuthService {
     login(payload: LoginDto) {
-        const token = Crypto.generateToken({ email: payload.email, id: 1 }); // Mock user ID
-        console.log(`Logging in with email: ${payload.email} and password: ${payload.password}`);
-        return token;
+        try {
+            const token = Crypto.generateToken({ email: payload.email, id: 1 }); // Mock user ID
+            return token;
+            
+        } catch (error) {
+            throw error;
+        }
     }
 
     register(email: string, password: string) {

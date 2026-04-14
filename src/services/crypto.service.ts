@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { IToken } from "../types/shared.types";
+import ApiError from "../shared/error-handler";
 
 class Crypto {
     static hashPassword(password: string): string {
@@ -16,24 +17,27 @@ class Crypto {
         const iv = crypto.randomBytes(16);
         const secret = process.env.JWT_SECRET
 
-        if (secret) {
-            const key = crypto.createHash('sha256').update(secret).digest();
+        try {
+            if (secret) {
+                const key = crypto.createHash('sha256').update(secret).digest();
 
-            const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+                const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
 
-            let encrypted = cipher.update(JSON.stringify(payload), 'utf8', 'hex');
-            encrypted += cipher.final('hex');
+                let encrypted = cipher.update(JSON.stringify(payload), 'utf8', 'hex');
+                encrypted += cipher.final('hex');
 
-            return `${encrypted}|${iv.toString('hex')}`;
+                return `${encrypted}|${iv.toString('hex')}`;
+            }
+
+            throw new Error("JWT_SECRET is not defined in environment variables");
+        } catch (error) {
+            throw error
         }
-
-        throw new Error("JWT_SECRET is not defined in environment variables");
     }
 
     static verifyToken(token: string) {
         const [encryptedData, iv] = token.split('|');
         const secret = process.env.JWT_SECRET;
-
         if (secret) {
             const key = crypto.createHash('sha256').update(secret).digest();
             const decipher = crypto.createDecipheriv(
@@ -45,13 +49,13 @@ class Crypto {
             // Decrypt the data
             let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
             decrypted += decipher.final('utf8');
-
             try {
                 return JSON.parse(decrypted);
             } catch (error) {
-                throw new Error("Invalid token");
+                throw new ApiError("Invalid token", { statusCode: 401 });
             }
         }
+        throw new ApiError("JWT_SECRET is not defined in environment variables");
     }
 }
 

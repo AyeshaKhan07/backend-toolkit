@@ -1,8 +1,8 @@
 import { ServerResponse } from "node:http";
 import { AuthApis } from "../modules/auth/auth.router";
 import { LoginDto } from "../modules/auth/dtos/login.dto";
+import ApiError from "../shared/error-handler";
 import { IRequest, Methods } from "../types/shared.types";
-import { responseParser } from "../shared/response-parser";
 
 export default function requestValidator(request: IRequest, response: ServerResponse, nextMiddleware: Function) {
     console.log("Request Validator middleware executed");
@@ -14,14 +14,12 @@ export default function requestValidator(request: IRequest, response: ServerResp
         case AuthApis.LOGIN:
             const errors = new LoginDto(request.body).errorMessages;
             if (Object.keys(errors).length)
-                return response.end(responseParser({ errors, message: "Validation failed" }));
-            
+                throw new ApiError("Data validation failed", {statusCode: 400, validationErrors: errors});
+
             nextMiddleware();
             break;
 
         default:
-            response.statusCode = 404;  
-            return response.end("Invalid API endpoint");
-            break;
+            throw new ApiError("Invalid API endpoint", { statusCode: 404 });
     }
 }
